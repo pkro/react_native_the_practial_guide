@@ -66,4 +66,38 @@ Aside: [Adding Eslint and Prettier to a react native project](https://dev-yakuza
 
 Layout is generally handled using [Flexbox](https://reactnative.dev/docs/flexbox), similar to CSS Flexbox
 
+*Every* view has flexbox enabled by default, so `flexDirection` etc. can be used immediately. Default is `flexDirection: 'column'` (unlike in a browser).
 
+Flex reminder:
+
+- `justifyContent`: how items are spaced on the main axis
+- `alignItems`: how items are aligned on the cross axis (e.g. `center`) and how much space they take (e.g. `stretch`)
+  - `flex` (set on flex child): takes space according to given number in relation to the `flex` properties set on the remaining children:
+
+
+    // Item one taking all available space, item2 just what it needs for its content
+    item1 {
+        flex: 1 
+    }
+    
+    item2: {
+    
+    }  
+    
+    // Item1 and Item2 take each 50% of the available space
+    item1 {
+        flex: 1
+    }
+    
+    item2: {
+        flex: 1
+    }  
+    
+    // Item1 takes 75% of the space, item2 25%
+    item1 {
+        flex: 3
+    }
+    
+    item2: {
+        flex: 1
+    }  

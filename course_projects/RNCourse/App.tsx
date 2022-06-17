@@ -10,6 +10,7 @@ export default function App() {
     const [keyRunner, setKeyRunner] = useState(1);
     const [currentGoal, setCurrentGoal] = useState<goalType>({ key: keyRunner, val: '' });
     const addGoal = () => {
+        if (!currentGoal.val.trim().length) return;
         setKeyRunner((prevState) => prevState + 1);
         setGoals((prevState) => [...prevState, currentGoal]);
         setCurrentGoal({ key: keyRunner, val: '' });
@@ -27,12 +28,12 @@ export default function App() {
                 <Button title={'Add goal'} onPress={() => addGoal()} />
             </View>
 
-            <View>
+            <View style={styles.items}>
                 {goals.map((goal) => (
                     <Text key={goal.key}>{goal.val}</Text>
                 ))}
             </View>
-            <View>
+            <View style={styles.resetButton}>
                 <Button
                     title={'Reset'}
                     onPress={() => {
@@ -49,7 +50,7 @@ export default function App() {
 const styles = StyleSheet.create({
     appContainer: {
         paddingTop: 50,
-        paddingHorizontal: 20,
+        paddingHorizontal: 16,
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-around',
@@ -57,13 +58,29 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        flex: 1,
+        alignItems: 'center',
     },
     textInput: {
         borderWidth: 1,
         borderColor: '#DDDDDD',
-        width: '80%',
+        flex: 4,
         borderRadius: 6,
         marginRight: 4,
         paddingLeft: 4, // padding inside the text field
+        height: 34,
+    },
+    items: {
+        flex: 5,
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderTopColor: 'gray',
+        borderBottomWidth: 1,
+        borderBottomColor: 'gray',
+        marginVertical: 8,
+    },
+    resetButton: {
+        flex: 1,
+        alignItems: 'center',
     },
 });
