@@ -62,6 +62,8 @@ Using `StyleSheet.create` instead of a plain object offers IDE autocompletion an
 
 https://reactnative.dev/docs/style
 
-Layout is generally handled using [Flexbox](https://reactnative.dev/docs/flexbox)
-
 Aside: [Adding Eslint and Prettier to a react native project](https://dev-yakuza.posstree.com/en/react-native/eslint-prettier-husky-lint-staged/)
+
+Layout is generally handled using [Flexbox](https://reactnative.dev/docs/flexbox), similar to CSS Flexbox
+
+
