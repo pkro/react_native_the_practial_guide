@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 export default function GoalInput(props: {
     currentGoal: GoalType;
     onChangeText: (text: string) => void;
-    onPress: () => void;
+    onAddGoal: () => void;
 }) {
     return (
         <View style={styles.inputContainer}>
@@ -34,7 +34,7 @@ export default function GoalInput(props: {
                 onChangeText={props.onChangeText}
             />
 
-            <Button title={'Add goal'} onPress={props.onPress} />
+            <Button title={'Add goal'} onPress={props.onAddGoal} />
         </View>
     );
 }

@@ -31,7 +31,7 @@ export default function App() {
             <GoalInput
                 currentGoal={currentGoal}
                 onChangeText={goalInputHandler}
-                onPress={() => addGoalHandler()}
+                onAddGoal={() => addGoalHandler()}
             />
 
             <View style={styles.goalItems}>
