@@ -1,6 +1,5 @@
 import React from 'react';
-import { ListRenderItemInfo, StyleSheet, Text, View } from 'react-native';
-import { GoalType } from '../types';
+import { StyleSheet, Text, View } from 'react-native';
 
 const styles = StyleSheet.create({
     goalItemWrapper: {
