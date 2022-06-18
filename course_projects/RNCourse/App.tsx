@@ -1,45 +1,47 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 
-type goalType = { key: number; val: string };
-
 export default function App() {
-    const [goals, setGoals] = useState<Array<goalType>>([]);
-    const [keyRunner, setKeyRunner] = useState(1);
-    const [currentGoal, setCurrentGoal] = useState<goalType>({ key: keyRunner, val: '' });
-    const addGoal = () => {
-        if (!currentGoal.val.trim().length) return;
-        setKeyRunner((prevState) => prevState + 1);
+    const [goals, setGoals] = useState<Array<string>>([]);
+    const [currentGoal, setCurrentGoal] = useState('');
+
+    const addGoalHandler = () => {
+        if (!currentGoal.trim().length || goals.includes(currentGoal)) return;
         setGoals((prevState) => [...prevState, currentGoal]);
-        setCurrentGoal({ key: keyRunner, val: '' });
+        setCurrentGoal('');
     };
+
     return (
         <View style={styles.appContainer}>
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.textInput}
                     placeholder={'Enter a goal'}
-                    value={currentGoal.val}
-                    onChangeText={(text) => setCurrentGoal({ key: keyRunner, val: text })}
+                    value={currentGoal}
+                    onChangeText={setCurrentGoal}
                 />
 
-                <Button title={'Add goal'} onPress={() => addGoal()} />
+                <Button title={'Add goal'} onPress={() => addGoalHandler()} />
             </View>
 
-            <View style={styles.items}>
-                {goals.map((goal) => (
-                    <Text key={goal.key}>{goal.val}</Text>
-                ))}
+            <View style={styles.goalItems}>
+                <ScrollView>
+                    {goals.map((goal) => (
+                        <View style={styles.goalItemWrapper} key={goal}>
+                            <Text style={styles.goalItem}>{goal}</Text>
+                        </View>
+                    ))}
+                </ScrollView>
             </View>
+
             <View style={styles.resetButton}>
                 <Button
                     title={'Reset'}
                     onPress={() => {
                         setGoals([]);
-                        setKeyRunner(0);
-                        setCurrentGoal({ key: 0, val: '' });
+                        setCurrentGoal('');
                     }}
                 />
             </View>
@@ -70,14 +72,24 @@ const styles = StyleSheet.create({
         paddingLeft: 4, // padding inside the text field
         height: 34,
     },
-    items: {
-        flex: 5,
-        paddingVertical: 10,
+    goalItems: {
+        flex: 4,
+        paddingVertical: 6,
         borderTopWidth: 1,
         borderTopColor: 'gray',
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
         marginVertical: 8,
+    },
+    goalItemWrapper: {
+        borderRadius: 3,
+        backgroundColor: 'orange',
+        paddingLeft: 4,
+        marginBottom: 2,
+    },
+    goalItem: {
+        color: 'white',
+        fontSize: 20,
     },
     resetButton: {
         flex: 1,

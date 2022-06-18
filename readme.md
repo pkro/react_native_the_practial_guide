@@ -32,6 +32,7 @@ React native has a small set of [core components](https://reactnative.dev/docs/c
 
 There is no CSS, styles are written inline or as StyleSheet objects in javascript next to the component code. They react native styles are a subset of CSS.
 
+**Styles don't cascade** - styles from parent elements like `color` aren't inherited by child elements. 
 
 Example (App.tsx of a freshly generated project):
 
@@ -101,3 +102,11 @@ Flex reminder:
     item2: {
         flex: 1
     }  
+
+### Differences IOS / Android:
+
+- IOS text components can't have rounded corners (wrap with `View` as a workaround)
+
+### Scrollable lists
+
+`Views` are not scrollable (overflow will be hidden); `ScrollView` on the other hand is scrollable. The height of a `ScrollView` is determined by the parent, so wrap it in a view and set the height there (instead of just replacing `View` with `ScrollView`)
