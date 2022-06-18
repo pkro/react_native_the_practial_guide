@@ -175,3 +175,9 @@ FlatList (using `keyExtractor`):
         );
     }
     // ...
+
+### Handling taps on elements
+
+There is no generic `onClick` property on react native components (except buttons). To make an element tappable, it must be wrapped in a  `Pressable` components (others like `Touchable` exist but most are deprecated in favor of `Pressable`)
+
+Sidenote: removing a pending snapshot if emulator was killed: https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou

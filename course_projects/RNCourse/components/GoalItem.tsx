@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { GoalType } from '../types';
 
 const styles = StyleSheet.create({
     goalItemWrapper: {
@@ -16,12 +17,16 @@ const styles = StyleSheet.create({
 });
 
 type GoalItemProps = {
-    text: string;
+    goal: GoalType;
+    onPress: (goalId: string) => void;
 };
-export default function GoalItem({ text }: GoalItemProps) {
+export default function GoalItem({ goal, onPress }: GoalItemProps) {
     return (
-        <View style={styles.goalItemWrapper}>
-            <Text style={styles.goalItem}>{text}</Text>
-        </View>
+        <Pressable onPress={() => onPress(goal.id)}>
+            {/* could also be done with <Pressable onPress={onPress.bind(this, goal.id)}> */}
+            <View style={styles.goalItemWrapper}>
+                <Text style={styles.goalItem}>{goal.text}</Text>
+            </View>
+        </Pressable>
     );
 }
