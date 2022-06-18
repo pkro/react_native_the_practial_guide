@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     goalItemWrapper: {
         borderRadius: 3,
         backgroundColor: 'orange',
-        paddingLeft: 4,
+        padding: 4,
+        paddingLeft: 8,
         marginBottom: 6,
     },
     goalItem: {
@@ -16,12 +17,12 @@ const styles = StyleSheet.create({
 });
 
 type GoalItemProps = {
-    listRenderItem: ListRenderItemInfo<GoalType>;
+    text: string;
 };
-export default function GoalItem({ listRenderItem }: GoalItemProps) {
+export default function GoalItem({ text }: GoalItemProps) {
     return (
         <View style={styles.goalItemWrapper}>
-            <Text style={styles.goalItem}>{listRenderItem.item.text}</Text>
+            <Text style={styles.goalItem}>{text}</Text>
         </View>
     );
 }
