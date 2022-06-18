@@ -3,14 +3,7 @@ import { Button, FlatList, StyleSheet, View } from 'react-native';
 import GoalItem from './components/GoalItem';
 import { GoalType } from './types';
 import GoalInput from './components/GoalInput';
-
-function uniqueKey() {
-    return Math.random().toString();
-}
-
-function createEmptyGoal(): GoalType {
-    return { text: '', id: uniqueKey() };
-}
+import { createEmptyGoal } from './lib/lib';
 
 export default function App() {
     const [goals, setGoals] = useState<Array<GoalType>>([]);
