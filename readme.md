@@ -178,6 +178,28 @@ FlatList (using `keyExtractor`):
 
 ### Handling taps on elements
 
-There is no generic `onClick` property on react native components (except buttons). To make an element tappable, it must be wrapped in a  `Pressable` components (others like `Touchable` exist but most are deprecated in favor of `Pressable`)
+There is no generic `onClick` property on react native components (except buttons). To make an element tappable, it must be wrapped in a  `Pressable` components (others like `Touchable` exist but most are deprecated in favor of `Pressable`). `Pressable` can also wrap a `Text` element, which can be useful to apply a ripple effect on android:
+
+    export default function GoalItem({ goal, onPress }: GoalItemProps) {
+        return (
+            <View style={styles.goalItemWrapper}>
+                {/* could also be done with <Pressable onPress={onPress.bind(this, goal.id)}> */}
+                <Pressable android_ripple={{ color: '#dddddd' }} onPress={() => onPress(goal.id)}>
+                    <Text style={styles.goalItem}>{goal.text}</Text>
+                </Pressable>
+            </View>
+        );
+    }
+
+On IOS, android_ripple has no effect but we can pass a function to the `style` prop that adds certain styles when a `Pressable` is pressed (the effect is also applied on android in addition to the ripple effect):
+
+    ...
+    <Pressable
+        android_ripple={{ color: '#dddddd' }}
+        style={({ pressed }) => pressed && styles.pressedItem}
+        onPress={() => onPress(goal.id)}
+    >
+    ...
+
 
 Sidenote: removing a pending snapshot if emulator was killed: https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou
