@@ -2,11 +2,8 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
-
-type GoalType = {
-    text: string;
-    id: string;
-};
+import GoalItem from './components/GoalItem';
+import { GoalType } from './types';
 
 function uniqueKey() {
     return Math.random().toString();
@@ -47,11 +44,7 @@ export default function App() {
                 <FlatList
                     data={goals}
                     keyExtractor={(item) => item.id}
-                    renderItem={(itemData) => (
-                        <View style={styles.goalItemWrapper}>
-                            <Text style={styles.goalItem}>{itemData.item.text}</Text>
-                        </View>
-                    )}
+                    renderItem={(itemData) => <GoalItem listRenderItem={itemData} />}
                 />
             </View>
 
@@ -99,16 +92,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
         marginVertical: 8,
-    },
-    goalItemWrapper: {
-        borderRadius: 3,
-        backgroundColor: 'orange',
-        paddingLeft: 4,
-        marginBottom: 6,
-    },
-    goalItem: {
-        color: 'white',
-        fontSize: 20,
     },
     resetButton: {
         flex: 1,
