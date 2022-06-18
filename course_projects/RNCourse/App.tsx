@@ -1,9 +1,8 @@
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Button, FlatList, StyleSheet, View } from 'react-native';
 import GoalItem from './components/GoalItem';
 import { GoalType } from './types';
+import GoalInput from './components/GoalInput';
 
 function uniqueKey() {
     return Math.random().toString();
@@ -29,16 +28,11 @@ export default function App() {
 
     return (
         <View style={styles.appContainer}>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder={'Enter a goal'}
-                    value={currentGoal.text}
-                    onChangeText={goalInputHandler}
-                />
-
-                <Button title={'Add goal'} onPress={() => addGoalHandler()} />
-            </View>
+            <GoalInput
+                currentGoal={currentGoal}
+                onChangeText={goalInputHandler}
+                onPress={() => addGoalHandler()}
+            />
 
             <View style={styles.goalItems}>
                 <FlatList
@@ -68,21 +62,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-around',
-    },
-    inputContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flex: 1,
-        alignItems: 'center',
-    },
-    textInput: {
-        borderWidth: 1,
-        borderColor: '#DDDDDD',
-        flex: 4,
-        borderRadius: 6,
-        marginRight: 4,
-        paddingLeft: 4, // padding inside the text field
-        height: 34,
     },
     goalItems: {
         flex: 4,

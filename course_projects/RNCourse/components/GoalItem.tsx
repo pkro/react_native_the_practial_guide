@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListRenderItem, ListRenderItemInfo, StyleSheet, Text, View } from 'react-native';
+import { ListRenderItemInfo, StyleSheet, Text, View } from 'react-native';
 import { GoalType } from '../types';
 
 const styles = StyleSheet.create({
