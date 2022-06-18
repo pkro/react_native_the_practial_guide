@@ -110,3 +110,68 @@ Flex reminder:
 ### Scrollable lists
 
 `Views` are not scrollable (overflow will be hidden); `ScrollView` on the other hand is scrollable. The height of a `ScrollView` is determined by the parent, so wrap it in a view and set the height there (instead of just replacing `View` with `ScrollView`)
+
+`ScrollView` has several configuration options and OS-specific behavior settings.
+
+### Optimizing lists with FlatList
+
+`ScrollView` always renders ALL items, which can be unperformant for very long lists.
+
+`FlatList` will only render items that are visible (plus an internal buffer).
+
+`FlatList` doesn't wrap manually rendered Items like View or ScrollView but receives a `data` prop for the items and a `renderItem` for the component.
+If the passed `data` array contains a list of objects that each have a `key` member, the keys will be generated automatically. Alternatively, the property that should be used from the object can be defined with the `keyExtractor` prop on FlatList that expects a selector function, e.g. `keyExtractor={(item, index) => item.key}
+
+ScrollView:
+
+    <View style={styles.goalItems}>
+        <ScrollView>
+            {goals.map((goal) => (
+                <View style={styles.goalItemWrapper} key={goal}>
+                    <Text style={styles.goalItem}>{goal}</Text>
+                </View>
+            ))}
+        </ScrollView>
+    </View>
+
+FlatList (using `keyExtractor`):
+
+    type GoalType = {
+        text: string;
+        id: string;
+    };
+
+    // ...
+
+    export default function App() {
+        const [goals, setGoals] = useState<Array<GoalType>>([]);
+        const [currentGoal, setCurrentGoal] = useState(createEmptyGoal());
+        const goalInputHandler = (text: string) => setCurrentGoal({ ...currentGoal, text: text });
+        const addGoalHandler = () => {
+            if (
+                !currentGoal.text.trim().length ||
+                goals.find((goal) => goal.text === currentGoal.text.trim())
+            )
+                return;
+            setGoals((prevState) => [...prevState, currentGoal]);
+            setCurrentGoal(createEmptyGoal());
+        };
+    
+        return (
+                { /* ... * /}
+                <View style={styles.goalItems}>
+                    <FlatList
+                        data={goals}
+                        keyExtractor={(item) => item.id}
+                        renderItem={(itemData) => (
+                            <View style={styles.goalItemWrapper}>
+                                <Text style={styles.goalItem}>{itemData.item.text}</Text>
+                            </View>
+                        )}
+                    />
+                </View>
+    
+                { /* ... * /}
+        );
+    }
+    // ...

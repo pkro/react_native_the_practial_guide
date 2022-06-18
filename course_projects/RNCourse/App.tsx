@@ -1,16 +1,33 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 
-export default function App() {
-    const [goals, setGoals] = useState<Array<string>>([]);
-    const [currentGoal, setCurrentGoal] = useState('');
+type GoalType = {
+    text: string;
+    id: string;
+};
 
+function uniqueKey() {
+    return Math.random().toString();
+}
+
+function createEmptyGoal(): GoalType {
+    return { text: '', id: uniqueKey() };
+}
+
+export default function App() {
+    const [goals, setGoals] = useState<Array<GoalType>>([]);
+    const [currentGoal, setCurrentGoal] = useState(createEmptyGoal());
+    const goalInputHandler = (text: string) => setCurrentGoal({ ...currentGoal, text: text });
     const addGoalHandler = () => {
-        if (!currentGoal.trim().length || goals.includes(currentGoal)) return;
+        if (
+            !currentGoal.text.trim().length ||
+            goals.find((goal) => goal.text === currentGoal.text.trim())
+        )
+            return;
         setGoals((prevState) => [...prevState, currentGoal]);
-        setCurrentGoal('');
+        setCurrentGoal(createEmptyGoal());
     };
 
     return (
@@ -19,21 +36,23 @@ export default function App() {
                 <TextInput
                     style={styles.textInput}
                     placeholder={'Enter a goal'}
-                    value={currentGoal}
-                    onChangeText={setCurrentGoal}
+                    value={currentGoal.text}
+                    onChangeText={goalInputHandler}
                 />
 
                 <Button title={'Add goal'} onPress={() => addGoalHandler()} />
             </View>
 
             <View style={styles.goalItems}>
-                <ScrollView>
-                    {goals.map((goal) => (
-                        <View style={styles.goalItemWrapper} key={goal}>
-                            <Text style={styles.goalItem}>{goal}</Text>
+                <FlatList
+                    data={goals}
+                    keyExtractor={(item) => item.id}
+                    renderItem={(itemData) => (
+                        <View style={styles.goalItemWrapper}>
+                            <Text style={styles.goalItem}>{itemData.item.text}</Text>
                         </View>
-                    ))}
-                </ScrollView>
+                    )}
+                />
             </View>
 
             <View style={styles.resetButton}>
@@ -41,7 +60,7 @@ export default function App() {
                     title={'Reset'}
                     onPress={() => {
                         setGoals([]);
-                        setCurrentGoal('');
+                        setCurrentGoal(() => createEmptyGoal());
                     }}
                 />
             </View>
@@ -85,7 +104,7 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: 'orange',
         paddingLeft: 4,
-        marginBottom: 2,
+        marginBottom: 6,
     },
     goalItem: {
         color: 'white',
