@@ -3,29 +3,21 @@ import { Button, FlatList, StyleSheet, View } from 'react-native';
 import GoalItem from './components/GoalItem';
 import { GoalType } from './types';
 import GoalInput from './components/GoalInput';
-import { createEmptyGoal } from './lib/lib';
 
 export default function App() {
     const [goals, setGoals] = useState<Array<GoalType>>([]);
-    const [currentGoal, setCurrentGoal] = useState(createEmptyGoal());
-    const goalInputHandler = (text: string) => setCurrentGoal({ ...currentGoal, text: text });
-    const addGoalHandler = () => {
+    const addGoalHandler = (goal: GoalType) => {
         if (
-            !currentGoal.text.trim().length ||
-            goals.find((goal) => goal.text === currentGoal.text.trim())
+            !goal.text.trim().length ||
+            goals.find((listGoal) => listGoal.text === goal.text.trim())
         )
             return;
-        setGoals((prevState) => [...prevState, currentGoal]);
-        setCurrentGoal(createEmptyGoal());
+        setGoals((prevState) => [...prevState, goal]);
     };
 
     return (
         <View style={styles.appContainer}>
-            <GoalInput
-                currentGoal={currentGoal}
-                onChangeText={goalInputHandler}
-                onAddGoal={() => addGoalHandler()}
-            />
+            <GoalInput onAddGoal={addGoalHandler} />
 
             <View style={styles.goalItems}>
                 <FlatList
@@ -34,13 +26,11 @@ export default function App() {
                     renderItem={(itemData) => <GoalItem text={itemData.item.text} />}
                 />
             </View>
-
             <View style={styles.resetButton}>
                 <Button
                     title={'Reset'}
                     onPress={() => {
                         setGoals([]);
-                        setCurrentGoal(() => createEmptyGoal());
                     }}
                 />
             </View>
