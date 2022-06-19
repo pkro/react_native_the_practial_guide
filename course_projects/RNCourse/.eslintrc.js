@@ -17,10 +17,4 @@ module.exports = {
         sourceType: 'module',
     },
     plugins: ['react', '@typescript-eslint', 'prettier'],
-    rules: {
-        indent: ['error', 4],
-        'linebreak-style': ['error', 'unix'],
-        quotes: ['error', 'single'],
-        semi: ['error', 'always'],
-    },
 };
