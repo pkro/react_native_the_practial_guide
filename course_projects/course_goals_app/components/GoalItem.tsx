@@ -25,7 +25,7 @@ export default function GoalItem({ goal, onPress }: GoalItemProps) {
 const styles = StyleSheet.create({
     goalItemWrapper: {
         borderRadius: 3,
-        backgroundColor: 'orange',
+        backgroundColor: '#311b6b',
         padding: 0,
 
         marginBottom: 6,

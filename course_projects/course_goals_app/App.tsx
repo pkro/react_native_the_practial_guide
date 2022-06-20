@@ -3,9 +3,12 @@ import { Button, FlatList, StyleSheet, View } from 'react-native';
 import GoalItem from './components/GoalItem';
 import { GoalType } from './types';
 import GoalInput from './components/GoalInput';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
     const [goals, setGoals] = useState<Array<GoalType>>([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    console.log(modalOpen);
     const addGoalHandler = (goal: GoalType) => {
         if (
             !goal.text.trim().length ||
@@ -19,27 +22,35 @@ export default function App() {
         setGoals((prevState) => prevState.filter((goal) => goal.id !== goalId));
     };
     return (
-        <View style={styles.appContainer}>
-            <GoalInput onAddGoal={addGoalHandler} />
+        <>
+            <StatusBar style={'light'} />
+            <View style={styles.appContainer}>
+                <Button title={'Add goal'} color={'orange'} onPress={() => setModalOpen(true)} />
+                <GoalInput
+                    onAddGoal={addGoalHandler}
+                    modalOpen={modalOpen}
+                    closeFunc={() => setModalOpen(false)}
+                />
 
-            <View style={styles.goalItems}>
-                <FlatList
-                    data={goals}
-                    keyExtractor={(item) => item.id}
-                    renderItem={(itemData) => (
-                        <GoalItem goal={itemData.item} onPress={deleteGoalHandler} />
-                    )}
-                />
+                <View style={styles.goalItems}>
+                    <FlatList
+                        data={goals}
+                        keyExtractor={(item) => item.id}
+                        renderItem={(itemData) => (
+                            <GoalItem goal={itemData.item} onPress={deleteGoalHandler} />
+                        )}
+                    />
+                </View>
+                <View style={styles.resetButton}>
+                    <Button
+                        title={'Reset'}
+                        onPress={() => {
+                            setGoals([]);
+                        }}
+                    />
+                </View>
             </View>
-            <View style={styles.resetButton}>
-                <Button
-                    title={'Reset'}
-                    onPress={() => {
-                        setGoals([]);
-                    }}
-                />
-            </View>
-        </View>
+        </>
     );
 }
 

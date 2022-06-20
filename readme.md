@@ -1,6 +1,6 @@
 # React native the practical guide course follow-along
 
-## getting started
+## Getting started
 
 ReactJS is platform agnostic. React-dom is a library on top of it that is used for web development, React native is for creating platform agnostic mobile apps (IOS / Android).npm 
 
@@ -63,8 +63,6 @@ Using `StyleSheet.create` instead of a plain object offers IDE autocompletion an
 
 https://reactnative.dev/docs/style
 
-Aside: [Adding Eslint and Prettier to a react native project](https://dev-yakuza.posstree.com/en/react-native/eslint-prettier-husky-lint-staged/)
-
 Layout is generally handled using [Flexbox](https://reactnative.dev/docs/flexbox), similar to CSS Flexbox
 
 *Every* view has flexbox enabled by default, so `flexDirection` etc. can be used immediately. Default is `flexDirection: 'column'` (unlike in a browser).
@@ -103,7 +101,7 @@ Flex reminder:
         flex: 1
     }  
 
-### Differences IOS / Android:
+### Differences IOS / Android
 
 - IOS text components can't have rounded corners (wrap with `View` as a workaround)
 
@@ -201,5 +199,47 @@ On IOS, android_ripple has no effect but we can pass a function to the `style` p
     >
     ...
 
+### Modals / Buttons
 
-Sidenote: removing a pending snapshot if emulator was killed: https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou
+- RN has a `Modal` component included with `visible` and `animationType` props as the most important ones
+- `Buttons` don't support `style` props but `color`. Custom buttons can be styles with `Pressable` and styled views inside of it
+- Images should go into their own directory in the "assets" folder
+
+### Images / colors
+
+- Use the `Image` component with a `source` prop  to display images
+- React native doesn't support svgs out of the box; more [here](https://blog.logrocket.com/how-to-use-svgs-react-native-tutorial-with-examples/)
+- The image asset can't be imported but must be included with `require`
+- Images support `style`
+
+
+    <Image style={styles.goalImg} source={require('../assets/images/goal.png')} />
+
+- A global (or OS-specific) app background color can be defined in `app.json`
+- If the statusbar text / icons clash with the background color, we can set a style (a string!) for it using the StatusBar component (`import { StatusBar } from 'expo-status-bar';`):
+
+
+    ...
+    return (
+        <>
+            <StatusBar style={'light'} />
+            <View style={styles.appContainer}>
+    ...
+
+## Debugging introduction
+
+- console.logs and stacktraces are logged in the console where `npm start android` is running
+- pressing `m` in the console opens a menu in the emulator with, among others, debugging options
+- react devtools can be installed globally as a standalone version: `sudo npm install -g react-devtools` and ran with `react-devtools` while the `npm start android` is running, which opens a new standalone devtools window
+- more here: https://reactnative.dev/docs/debugging
+
+## Diving deeper into components, layouts, styling
+
+## Sidenotes
+
+- removing a pending snapshot if emulator was killed: `sudo rm ~/.android/avd/<your-device-name>.avd/*.lock` https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou
+- factory-reset the emulator in android studio->tools->device manager->arrow down icon beside the avd
+- [Adding Eslint and Prettier to a react native project](https://dev-yakuza.posstree.com/en/react-native/eslint-prettier-husky-lint-staged/)
+  - remove "rules" from eslint for tabs etc. as it's just annoying and is fixed by prettier anyway
+  - enable eslint / prettier in IntelliJ
+  - add `globals: { module: true }` to `.eslintrc.js` to get rid of module error shown there
