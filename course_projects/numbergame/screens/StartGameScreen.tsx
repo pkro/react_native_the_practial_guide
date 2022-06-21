@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {CustomButton} from "../components/CustomButton";
+
+
 
 export function StartGameScreen() {
     const [enteredNumber, setEnteredNumber] = useState<string | undefined>();
@@ -15,8 +18,8 @@ export function StartGameScreen() {
                            onChangeText={setEnteredNumber}/>
             </View>
             <View style={styles.buttonRow}>
-                <Pressable style={styles.button}><Text style={styles.buttonText}>reset</Text></Pressable>
-                <Pressable style={styles.button}><Text style={styles.buttonText}>confirm</Text></Pressable>
+                <CustomButton text={'cancel'} onPress={()=>null}/>
+                <CustomButton text={'confirm'} onPress={()=>null}/>
             </View>
         </View></>
 }
@@ -75,10 +78,7 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingTop: 16
     },
-    button: {width: 128, borderRadius: 24, backgroundColor: '#640a3b', padding: 8},
-    buttonText: {
-        color: 'white', textAlign: 'center', fontSize: 16
-    },
+
     inputTitle: {},
     numberInput: {},
     guess: {},
