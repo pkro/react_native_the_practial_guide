@@ -189,7 +189,7 @@ There is no generic `onClick` property on react native components (except button
         );
     }
 
-On IOS, android_ripple has no effect but we can pass a function to the `style` prop that adds certain styles when a `Pressable` is pressed (the effect is also applied on android in addition to the ripple effect):
+On IOS, android_ripple has no effect, but we can pass a function to the `style` prop that adds certain styles when a `Pressable` is pressed (the effect is also applied on android in addition to the ripple effect):
 
     ...
     <Pressable
@@ -234,6 +234,63 @@ On IOS, android_ripple has no effect but we can pass a function to the `style` p
 - more here: https://reactnative.dev/docs/debugging
 
 ## Diving deeper into components, layouts, styling
+
+### Shadow
+There is no `boxShadow` styling property but an `elevation` property with a similar effect (Android only); on iOS, there are shadow* properties: 
+
+
+      elevation: 8, // for android
+      // below for iOS
+      shadowOffset: {width: 8, height: 8},
+      shadowColor: 'black',
+      shadowRadius: 6,
+      shadowOpacity: 0.25
+
+### Pressable styles
+
+Styles can be passed as an object or as an *array* of objects:
+
+    <Pressable
+          style={({ pressed }) =>
+              pressed ? [styles.pressed, styles.innerContainer] : styles.innerContainer
+          }
+          onPress={onPress}
+          android_ripple={{ color: '#2c041a' }}
+      >
+
+### Backgrounds
+
+Gradients can be applied using [expo LinearGradient](https://docs.expo.dev/versions/latest/sdk/linear-gradient/):
+
+    <LinearGradient colors={['#4e0239', '#ddb52f']} style={styles.container}>...</LinearGradient>
+
+### Different styles for android and iOS
+
+### Alerts
+
+React native exposes an `Alert` component that can be used to display alerts or for confirmations (ok/cancel) like in the browser:
+
+    import { Alert } from 'react-native'; 
+    ...
+    Alert.alert('Please enter a number', 'The number must be between 0 and 99!', [
+                { text: 'OK', style: 'destructive', onPress: () => setEnteredNumber('') },
+            ]);
+  
+### Respecting device screen restrictions with SafeAreaView
+
+To avoid cameras etc. that reach into the screen, we can use `SafeAreaView`, which detects the device model and it's specific features that might hide some part of the screen.
+
+    <LinearGradient colors={['#4e0239', '#ddb52f']} style={styles.container}>
+        <ImageBackground .../>
+        <StatusBar style="auto" />
+        <SafeAreaView style={{flex: 1}}>
+            {enteredNumber ? (
+                <GameScreen number={enteredNumber} />
+            ) : (
+                <StartGameScreen setNumber={setNumber} />
+            )}
+        </SafeAreaView>
+    </LinearGradient>
 
 ## Sidenotes
 

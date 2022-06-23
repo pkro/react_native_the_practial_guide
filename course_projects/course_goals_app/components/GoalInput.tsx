@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    button: {
+    outerContainer: {
         width: '40%',
     },
     goalImg: {
@@ -72,10 +72,10 @@ export default function GoalInput({ onAddGoal, modalOpen, closeFunc }: GoalInput
                     onChangeText={goalInputHandler}
                 />
                 <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
+                    <View style={styles.outerContainer}>
                         <Button title={'Cancel'} onPress={cancel} color={'#924cee'} />
                     </View>
-                    <View style={styles.button}>
+                    <View style={styles.outerContainer}>
                         <Button title={'Add goal'} onPress={saveAndClose} color={'#f31282'} />
                     </View>
                 </View>
