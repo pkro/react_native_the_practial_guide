@@ -69,22 +69,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
     },
-    inputContainer: {
-        width: '90%',
-        height: 200,
-        padding: 32,
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        flexDirection: 'column',
-        backgroundColor: colors.primary500,
-        borderRadius: 6,
-        elevation: 8, // android
-        // ios
-        shadowOffset: { width: 8, height: 8 },
-        shadowColor: 'black',
-        shadowRadius: 6,
-        shadowOpacity: 0.25,
-    },
+
     textInputWrapper: {},
     textInput: {
         width: 60,

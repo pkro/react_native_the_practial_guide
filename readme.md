@@ -28,11 +28,15 @@ https://github.com/academind/react-native-practical-guide-code
 
 Most important react native components: `View` (like `div`) and `Text` like span.
 
+`<Text>` components can have `strings` and other `<Text>` components as children (others too?)
+
 React native has a small set of [core components](https://reactnative.dev/docs/components-and-apis) that are the building blocks of an App, like html elements are the core components of `react-dom`.
 
 There is no CSS, styles are written inline or as StyleSheet objects in javascript next to the component code. They react native styles are a subset of CSS.
 
-**Styles don't cascade** - styles from parent elements like `color` aren't inherited by child elements. 
+**Styles don't cascade** - styles from parent elements like `color` aren't inherited by child elements except for `<Text>` components insider other `<Text>` components.
+
+Styles in general can be passed as an object or as an *array* of objects and are evaluated from left to right (so the rightmost styles overwrite the previous ones).
 
 Example (App.tsx of a freshly generated project):
 
@@ -248,8 +252,6 @@ There is no `boxShadow` styling property but an `elevation` property with a simi
 
 ### Pressable styles
 
-Styles can be passed as an object or as an *array* of objects:
-
     <Pressable
           style={({ pressed }) =>
               pressed ? [styles.pressed, styles.innerContainer] : styles.innerContainer
@@ -291,6 +293,50 @@ To avoid cameras etc. that reach into the screen, we can use `SafeAreaView`, whi
             )}
         </SafeAreaView>
     </LinearGradient>
+
+### Adding icons
+
+Expo provides a huge set of vector icon sets through `@expo/vector-icons/`
+
+[Documentation](https://docs.expo.dev/guides/icons/)
+[icon directory](https://icons.expo.fyi/)
+
+[Currently there's an issue with typescript with these icons](https://github.com/expo/vector-icons/issues/225)
+
+Ugly workaround for now:
+
+    <PrimaryButton onPress={game.bind(this, 'lower')}>
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
+        <AntDesign name="minuscircleo" size={24} color={'white'} />
+    </PrimaryButton>
+
+### Adding custom fonts and Loading screen
+
+Custom fonts can be used by installing `expo install expo-font`, then add `import { useFonts } from 'expo-font';` to the main App component.
+
+https://docs.expo.dev/guides/using-custom-fonts/
+
+    const [fontsLoaded] = useFonts({
+        'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+        'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    });
+
+When loaded in the App component, these are then available with their respective names in all other components to use in the style objects:
+
+    titleText: {
+        color: '#FFFFFF',
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontFamily: 'open-sans-bold'
+    },
+
+A default loading screen can be installed using `expo install expo-app-loading` which then provides an `AppLoading` component.
+
+    if (!fontsLoaded) {
+      return <AppLoading />;
+    }
 
 ## Sidenotes
 

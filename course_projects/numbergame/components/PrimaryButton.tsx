@@ -1,8 +1,9 @@
-import React, { ReactChildren } from 'react';
-import { Pressable, StyleSheet, Text, TextProps, View } from 'react-native';
+import React, { ReactComponentElement, ReactElement, ReactNode } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import colors from '../constants/colors';
 
-type CustomButtonPropsType = { onPress: () => void; children: string };
+// children props in typescript are quite a hazzle
+type CustomButtonPropsType = { onPress: () => void; children: any };
 
 export function PrimaryButton({ onPress, children }: CustomButtonPropsType) {
     return (
@@ -14,7 +15,11 @@ export function PrimaryButton({ onPress, children }: CustomButtonPropsType) {
                 onPress={onPress}
                 android_ripple={{ color: colors.primary600 }}
             >
-                <Text style={styles.buttonText}>{children}</Text>
+                {typeof children === 'string' ? (
+                    <Text style={styles.buttonText}>{children}</Text>
+                ) : (
+                    <View style={styles.buttonElement}>{children}</View>
+                )}
             </Pressable>
         </View>
     );
@@ -38,6 +43,10 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontSize: 20,
+    },
+    buttonElement: {
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     pressed: {
         opacity: 0.75, // to get some effect on IOS (same applied on android)

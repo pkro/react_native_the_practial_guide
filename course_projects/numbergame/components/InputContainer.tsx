@@ -18,11 +18,12 @@ const styles = StyleSheet.create({
     inputContainerTitleText: {
         color: colors.accent500,
         fontSize: 20,
+        fontFamily: 'open-sans-bold',
         textAlign: 'center',
     },
     inputContainer: {
         width: '90%',
-        height: 200,
+
         padding: 32,
         alignItems: 'center',
         justifyContent: 'space-evenly',
