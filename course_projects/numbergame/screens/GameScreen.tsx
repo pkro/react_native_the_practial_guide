@@ -44,9 +44,9 @@ export function GameScreen(
             return;
         }
         if (direction === 'higher') {
-            min = currentGuess;
+            min = currentGuess + 1;
         } else {
-            max = currentGuess;
+            max = currentGuess - 1;
         }
 
         const nextGuess = rnd(min, max, currentGuess);

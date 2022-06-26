@@ -338,6 +338,10 @@ A default loading screen can be installed using `expo install expo-app-loading` 
       return <AppLoading />;
     }
 
+## Building adaptive user interfaces
+
+
+
 ## Sidenotes
 
 - removing a pending snapshot if emulator was killed: `sudo rm ~/.android/avd/<your-device-name>.avd/*.lock` https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou
