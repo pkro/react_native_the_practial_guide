@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
+import {
+    Alert,
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+    useWindowDimensions,
+    Dimensions,
+} from 'react-native';
 import Title from '../components/Title';
 import colors from '../constants/colors';
 import InputContainer from '../components/InputContainer';
@@ -19,14 +27,13 @@ export function GameScreen(
     { userNumber, setGameOver, setRoundsNeeded }: GameScreenPropsType,
 ) {
     const { guesses, currentGuess, game } = useGame(userNumber, setRoundsNeeded, setGameOver);
+    const { width, height } = useWindowDimensions();
 
-    return (
-        <View style={styles.container}>
-            <Title>Opponent&apos;s Guess</Title>
+    let content = (
+        <>
             <View style={styles.guess}>
                 <Text style={styles.guessText}>{currentGuess}</Text>
             </View>
-
             <InputContainer title={'Lower or higher?'}>
                 <View style={styles.buttonRow}>
                     <View style={styles.buttonContainer}>
@@ -45,11 +52,43 @@ export function GameScreen(
                     </View>
                 </View>
             </InputContainer>
+        </>
+    );
+    if (height < 500) {
+        content = (
+            <InputContainer>
+                <View style={styles.verticalContainer}>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={game.bind(this, 'lower')}>
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/* @ts-ignore */}
+                            <AntDesign name="minuscircleo" size={24} color={'white'} />
+                        </PrimaryButton>
+                    </View>
+                    <View style={[styles.guess, { marginBottom: 0 }]}>
+                        <Text style={styles.guessText}>{currentGuess}</Text>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={game.bind(this, 'higher')}>
+                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                            {/* @ts-ignore */}
+                            <AntDesign name="pluscircleo" size={24} color={'white'} />
+                        </PrimaryButton>
+                    </View>
+                </View>
+            </InputContainer>
+        );
+    }
+
+    return (
+        <View style={styles.container}>
+            <Title>Opponent&apos;s Guess</Title>
+            {content}
             <View style={styles.flatListWrapper}>
                 <FlatList
                     bounces={true}
                     alwaysBounceVertical={true}
-                    style={styles.list}
+                    style={[styles.list, { marginTop: height < 500 ? 4 : 16 }]}
                     data={guesses}
                     contentContainerStyle={styles.listContainer}
                     keyExtractor={(item) => item.toString()}
@@ -68,6 +107,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         paddingTop: 48,
+    },
+    verticalContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
     },
 
     guess: {

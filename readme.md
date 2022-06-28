@@ -340,6 +340,64 @@ A default loading screen can be installed using `expo install expo-app-loading` 
 
 ## Building adaptive user interfaces
 
+### Dynamic widths
+
+- use min- / maxWidth / -Height with a percentage to limit width of items on smaller screens
+
+### Dimensions API
+
+`Dimensions` (imported from `react-native`) is a Javascript object (not a JSX component) to get the device width / height.
+
+    const deviceWidth = Dimensions.get('window').width;
+    // in styles:
+    padding: deviceWidth < 380 ? 12 : 32,
+
+### Screen orientation
+
+The default device orientation for the app is set in `app.json` under `expo`.
+
+Values: `default` (can switch orientation / not locked), `landscape` and `portrait`
+
+The Dimensions object is only created once if defined outside a component, so the values don't change when switching screen orientation.
+
+React native provide a useWindowDimenstions for this which watches the device' orientation:
+
+    ...
+    const { width, height } = useWindowDimensions();
+    const marginTopDistance = height < 380 ? 16 : 64;
+
+    return (
+        <View style={[styles.container, {marginTop: marginTopDistance}]}>
+    ...
+
+
+### KeyboardAvoidingView
+
+        <ScrollView style={{ flex: 1 }}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={'position'}>
+                <View style={[styles.container, { marginTop: marginTopDistance }]}>
+
+
+### Writing Platform-specific code with the Platform API
+
+Can be used simply like `borderWidth: Platform.OS === 'ios' ? 2 : 5` or with `Platform.select`:
+
+    borderColor: Platform.select({
+        ios: '#FFFFFF',
+        android: '#cccccc',
+    }),
+
+### Loading platform specific components
+
+By simply naming files `Componentname.platform.tsx`, e.g. `Title.ios.tsx` and `Title.android.tsx` react native will automatically pick the correct OS-specific component when importing with `import Title from './Title'`. The same goes for all  (not just react components) such as e.g. `colors.ios.ts`.
+
+### Styling the status bar
+
+Gives different options like dark, light, auto and inverted and can be used in the main app.ts or in single components / screens if necessary. Position in the tsx doesn't seem to matter.
+
+    <StatusBar style="inverted" />
+
+## Navigation  / Meals app
 
 
 ## Sidenotes

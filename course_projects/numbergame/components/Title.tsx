@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Platform } from 'react-native';
 
 type TitlePropsType = { children: string };
 export default function Title({ children }: TitlePropsType) {
@@ -12,10 +12,13 @@ export default function Title({ children }: TitlePropsType) {
 
 const styles = StyleSheet.create({
     title: {
-        borderWidth: 2,
-        borderColor: '#FFFFFF',
+        borderWidth: Platform.OS === 'ios' ? 2 : 5,
+        borderColor: Platform.select({
+            ios: '#FFFFFF',
+            android: '#cccccc',
+        }),
         padding: 8,
-        width: '60%',
+        maxWidth: '80%',
         marginBottom: 32,
     },
     titleText: {

@@ -1,18 +1,20 @@
 import React, { ReactChildren, ReactNode } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import colors from '../constants/colors';
 
-type TitlePropsType = { children: ReactNode; title: string };
+type TitlePropsType = { children: ReactNode; title?: string };
 export default function InputContainer({ title, children }: TitlePropsType) {
     return (
         <View style={styles.inputContainer}>
             <>
-                <Text style={styles.inputContainerTitleText}>{title}</Text>
+                {title && <Text style={styles.inputContainerTitleText}>{title}</Text>}
                 {children}
             </>
         </View>
     );
 }
+
+const deviceWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     inputContainerTitleText: {
@@ -23,8 +25,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: '90%',
-
-        padding: 32,
+        padding: deviceWidth < 380 ? 12 : 32,
         alignItems: 'center',
         justifyContent: 'space-evenly',
         flexDirection: 'column',

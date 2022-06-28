@@ -57,7 +57,7 @@ export default function App() {
                 resizeMode={'cover'}
                 imageStyle={{ opacity: 0.5 }}
             />
-            <StatusBar style="auto" />
+            <StatusBar style="inverted" />
             <SafeAreaView style={styles.container}>{screen}</SafeAreaView>
         </LinearGradient>
     );
