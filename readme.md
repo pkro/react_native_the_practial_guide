@@ -1,5 +1,62 @@
 # React native the practical guide course follow-along
 
+## Gist of creating a typscript expo project with good tooling:
+
+    expo init projectname # or npx create-expo-app projectname
+    cd projectname
+    npm install --save-dev eslint-plugin-react @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react-hooks prettier eslint-plugin-prettier
+
+create the following files in project root with the following content:
+
+`.eslintrc.js`
+
+    module.exports = {
+        "env": {
+            "browser": true,
+            "es2021": true
+        },
+        "extends": [
+            "eslint:recommended",
+            "plugin:react/recommended",
+            "plugin:@typescript-eslint/recommended"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+            "ecmaFeatures": {
+                "jsx": true
+            },
+            "ecmaVersion": "latest",
+            "sourceType": "module"
+        },
+        "plugins": [
+            "react",
+            "@typescript-eslint"
+        ],
+        "rules": {
+        }
+    }
+
+`.prettierrc.js`
+
+    module.exports = {
+        singleQuote: true,
+        trailingComma: 'all',
+        printWidth: 100,
+        tabWidth: 4,
+    };
+
+Run android emulator (change name of avd to the one created in android studio)
+
+    ~/Android/Sdk/emulator/emulator -avd Pixel_2_API_30
+
+Or put a function in `.bashrc`
+
+    emulator () {
+        ~/Android/Sdk/emulator/emulator -avd Pixel_2_API_30
+    }
+
+Start the app with `npm run android` (alternative scripts in package.json)
+
 ## Getting started
 
 ReactJS is platform agnostic. React-dom is a library on top of it that is used for web development, React native is for creating platform agnostic mobile apps (IOS / Android).npm 
@@ -23,6 +80,7 @@ When creating a project using `expo init [projectname]`, react-dom and react-nat
 Course code:
 
 https://github.com/academind/react-native-practical-guide-code
+
 
 ## Basics
 
@@ -400,7 +458,7 @@ Gives different options like dark, light, auto and inverted and can be used in t
 ## Navigation  / Meals app
 
 
-## Sidenotes
+# # Sidenotes
 
 - removing a pending snapshot if emulator was killed: `sudo rm ~/.android/avd/<your-device-name>.avd/*.lock` https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou
 - factory-reset the emulator in android studio->tools->device manager->arrow down icon beside the avd
