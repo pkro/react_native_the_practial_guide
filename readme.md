@@ -251,6 +251,8 @@ There is no generic `onClick` property on react native components (except button
         );
     }
 
+With rounded corners, a `overflow: 'hidden'` should be added to the surrounding container (here `goalItemWrapper`) so the ripple effect doesn't go past the rounded corners, but *NOT* for iOS as otherwise a possible shadow would be clipped as well.
+
 On IOS, android_ripple has no effect, but we can pass a function to the `style` prop that adds certain styles when a `Pressable` is pressed (the effect is also applied on android in addition to the ripple effect):
 
     ...
@@ -298,7 +300,7 @@ On IOS, android_ripple has no effect, but we can pass a function to the `style` 
 ## Diving deeper into components, layouts, styling
 
 ### Shadow
-There is no `boxShadow` styling property but an `elevation` property with a similar effect (Android only); on iOS, there are shadow* properties: 
+There is no `boxShadow` styling property but an `elevation` property with a similar effect (Android only); on iOS, there are shadow* properties (which only work if a backtgroundColor is set): 
 
 
       elevation: 8, // for android
@@ -307,6 +309,7 @@ There is no `boxShadow` styling property but an `elevation` property with a simi
       shadowColor: 'black',
       shadowRadius: 6,
       shadowOpacity: 0.25
+      backgroundColor: 'white' // needed to have any effect on iOS
 
 ### Pressable styles
 
@@ -457,6 +460,7 @@ Gives different options like dark, light, auto and inverted and can be used in t
 
 ## Navigation  / Meals app
 
+- To have multiple columns with `FlatList`, we have to use the `numColumns` prop instead of flexDirection / flexWrap 
 
 # # Sidenotes
 
