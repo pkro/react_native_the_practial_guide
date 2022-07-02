@@ -179,6 +179,8 @@ Flex reminder:
 
 `FlatList` will only render items that are visible (plus an internal buffer).
 
+To have multiple columns with `FlatList`, we have to use the `numColumns` prop instead of flexDirection / flexWrap.
+
 `FlatList` doesn't wrap manually rendered Items like View or ScrollView but receives a `data` prop for the items and a `renderItem` for the component.
 If the passed `data` array contains a list of objects that each have a `key` member, the keys will be generated automatically. Alternatively, the property that should be used from the object can be defined with the `keyExtractor` prop on FlatList that expects a selector function, e.g. `keyExtractor={(item, index) => item.key}
 
@@ -460,9 +462,16 @@ Gives different options like dark, light, auto and inverted and can be used in t
 
 ## Navigation  / Meals app
 
-- To have multiple columns with `FlatList`, we have to use the `numColumns` prop instead of flexDirection / flexWrap 
+https://reactnavigation.org/docs/getting-started/
 
-# # Sidenotes
+Wrap whole App in `NavigationContainer`.
+
+React navigation provides different *navigators* like the [stack navigator](https://reactnavigation.org/docs/stack-navigator) that mimicks the browser's history api. 
+
+The Navigationcontainer automatically creates a wrapper around the "pages" and adds a title at the top.
+
+
+## Sidenotes
 
 - removing a pending snapshot if emulator was killed: `sudo rm ~/.android/avd/<your-device-name>.avd/*.lock` https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou
 - factory-reset the emulator in android studio->tools->device manager->arrow down icon beside the avd
@@ -470,3 +479,4 @@ Gives different options like dark, light, auto and inverted and can be used in t
   - remove "rules" from eslint for tabs etc. as it's just annoying and is fixed by prettier anyway
   - enable eslint / prettier in IntelliJ
   - add `globals: { module: true }` to `.eslintrc.js` to get rid of module error shown there
+- To have multiple columns with `FlatList`, we have to use the `numColumns` prop instead of flexDirection / flexWrap 
