@@ -280,6 +280,8 @@ On IOS, android_ripple has no effect, but we can pass a function to the `style` 
 
 
     <Image style={styles.goalImg} source={require('../assets/images/goal.png')} />
+- Images can also use URLs, it the requires an object as source: 
+- For URL referenced images, width / height styles must be defined: `<Image source={{uri: 'http://blah.com/img.jpg'}}/>`
 
 - A global (or OS-specific) app background color can be defined in `app.json`
 - If the statusbar text / icons clash with the background color, we can set a style (a string!) for it using the StatusBar component (`import { StatusBar } from 'expo-status-bar';`):
@@ -468,7 +470,155 @@ Wrap whole App in `NavigationContainer`.
 
 React navigation provides different *navigators* like the [stack navigator](https://reactnavigation.org/docs/stack-navigator) that mimicks the browser's history api. 
 
+The `native-stack` navigator uses native components and is more performant; if it gives problems, the `stack` navigator can be used instead. 
+
 The Navigationcontainer automatically creates a wrapper around the "pages" and adds a title at the top.
+
+    import { createNativeStackNavigator } from '@react-navigation/native-stack';
+    // ...
+    const Stack = createNativeStackNavigator();
+    // ... 
+    <NavigationContainer>
+        <Stack.Navigator>
+            <Stack.Screen name="MealsCategories" component={Categories} />
+            <Stack.Screen name="MealsOverview" component={MealsOverview} />
+        </Stack.Navigator>
+    </NavigationContainer>
+
+The first screen defined in the list is used as the initial screen.
+
+
+### The navigation prop
+
+All components that are used in the `Screen` components automatically receive a navigation prop.
+
+    function Categories({ navigation }: any) {
+        // ...
+
+The navigation props gives access to `navigate` which can be used to navigate to different screens using the name defined in the Screen navigation entry:
+
+`navigation.navigate('MealsOverview');`
+
+### Passing / acquiring the navigation prop in subcomponents 
+
+The `navigation` prop can be forwarded to nested components via props or aquired with the `useNavigation` hook.
+
+    import {useNavigation} from '@react-navigation/native';
+    // ...
+    function CategoryGridTile({ title, color, onPress }: CategoryGridTilePropsType) {
+    const navigation = useNavigation(); 
+
+### Passing props on navigation.navigate using route.params
+
+On navigate, additional arbitrary parameters can be passed:
+
+    navigation.navigate('MealsOverview', {
+        categoryId: itemData.item.id,
+    });
+
+and extracted in the component (`MealsOverview`):
+
+    // navigation and route props are automatically added
+    export function MealsOverview({navigation, route}: any) {
+        const {categoryId} = route.params;
+        return (
+            <View>
+                <Text>Meals overview for {categoryId}</Text>
+            </View>
+        );
+    }
+
+Alternatively, the `useRoute` hook can be used.
+
+### Screen display options
+
+Options for title, colors etc. can be set in the Navigator or the individual screens: 
+
+      <NavigationContainer>
+          <Stack.Navigator screenOptions={{
+              animation: 'fade_from_bottom',
+              headerStyle: {
+                  backgroundColor: '#351401'
+              },
+              headerTintColor: 'white',
+              contentStyle: {backgroundColor: '#3f2f25'}
+          }}>
+              <Stack.Screen name="MealsCategories" component={Categories} options={{
+                  title: 'Meal Categories'
+              }}/>
+              <Stack.Screen name="MealsOverview" component={MealsOverview}/>
+          </Stack.Navigator>
+      </NavigationContainer>
+
+A function can be passed instead of an object:
+
+      <Stack.Screen name="MealsOverview" component={MealsOverview} options={({route, navigation})=>{
+          const catId = route.params.categoryId;
+          return {title: catId};
+      }}/>
+
+The options can be also set inside the component:
+
+As using `useEffect` only sets the title *after* rendering, it is better to use `useLayoutEffect`, which fires *before* paint (but is otherwise used the same way as `useEffect`.
+
+    export function MealsOverview({navigation, route}: any) {
+      const {categoryId, categoryName} = route.params;
+  
+      useLayoutEffect(() => {
+          const categoryTitle = CATEGORIES.find(c => c.id === categoryId)!.title;
+          navigation.setOptions({
+              title: categoryTitle
+          });
+      }, [categoryId, navigation]);
+      // ...
+
+### Typescript props
+
+https://reactnavigation.org/docs/typescript/
+
+Gist:
+
+Define a type `RootStackParamList` that defines the props for all routes, using the route names used in the root router as keys:
+
+    export type RootStackParamList = {
+        // screenName: {props}
+        MealsOverview: {
+            categoryId: string;
+            categoryName: string
+        };
+        MealDetail: { id: number };
+        MealsCategories: undefined; // no "custom" props beside route & navigation
+    };
+
+Then use these in the routes components:
+
+    type Props = NativeStackScreenProps<RootStackParamList, 'MealsOverview'>;
+    
+    export function MealsOverview({navigation, route}: Props) {
+        // typescript now knows that categoryId and categoryName exist on the route object
+        const {categoryId, categoryName} = route.params;
+
+Individual sub-components that are not route components are typed as usual as they don't automatically get `navigation` and `route` props but get their props as usual. If needed, the `navigation` can be passed like a normal prop or be acquired using `useNavigation` (don't forget to annotate):
+
+    type MealItemPropsType = {
+        id: string,
+        title: string;
+        imageUrl: string;
+        duration: string;
+        complexity: string;
+        affordability: string;
+    };
+    
+    function MealItem({id, title, imageUrl, complexity, duration, affordability}: MealItemPropsType) {
+    
+        const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    
+        function pressHandler(id: string) {
+            navigation.navigate('MealDetail', {
+                id: id,
+            });
+        }
+        // ...
 
 
 ## Sidenotes
