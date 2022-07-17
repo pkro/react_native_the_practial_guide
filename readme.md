@@ -238,6 +238,8 @@ FlatList (using `keyExtractor`):
     }
     // ...
 
+If the item list is just a flat list of unique strings, just use `keyExtractor={(item: string)=>item}`
+
 ### Handling taps on elements
 
 There is no generic `onClick` property on react native components (except buttons). To make an element tappable, it must be wrapped in a  `Pressable` components (others like `Touchable` exist but most are deprecated in favor of `Pressable`). `Pressable` can also wrap a `Text` element, which can be useful to apply a ripple effect on android:
@@ -619,6 +621,124 @@ Individual sub-components that are not route components are typed as usual as th
             });
         }
         // ...
+
+### Adding header buttons
+
+Buttons can be added to the navigation header on each screen using the screen options:
+
+    <Stack.Screen name="MealDetail" component={MealDetail} options={{
+        headerRight: () => <Button title={"tap me"} onPress={()=>null} />
+    }
+
+Buttons defined there can't interact with the component / page they're displayed on, but they can also be added on the screen using `navigation.setOptions` using `useLayoutEffect` as before:
+
+    function headerButtonPressHandler() {
+        console.log("Pressed")
+    }
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <Button title={"tap me"} onPress={headerButtonPressHandler} />
+        });
+    }, [navigation, headerButtonPressHandler]);
+
+### Other navigators
+
+#### Drawer
+
+https://reactnavigation.org/docs/drawer-navigator
+
+reanimated bug: 
+>Following the reanimated2 documentation , the problem is fixed adding the  react-native-reanimated/plugin   to babel.config.js  in root directory. After this, if the error persists, launch expo r -c for deploy the app with empty cache. This will probably fix the issue.
+
+Adding a drawer navigator:
+
+    const Drawer = createDrawerNavigator();
+
+    return <NavigationContainer>
+        <Drawer.Navigator>
+            <Drawer.Screen name={'WelcomeScreen'} component={WelcomeScreen}/>
+            <Drawer.Screen name={'UserScreen'} component={UserScreen}/>
+        </Drawer.Navigator>
+    </NavigationContainer>;
+
+This will make a burger menu appear at the top left beside the screen name.
+
+Configuration example:
+
+    const Drawer = createDrawerNavigator();
+
+    return <NavigationContainer>
+        <Drawer.Navigator screenOptions={{
+            drawerActiveBackgroundColor: '#f0e1ff',
+            drawerActiveTintColor: '#03c016b',
+            drawerStyle: {backgroundColor: '#ccc'},
+            headerStyle: {backgroundColor: '#3c016b'},
+            headerTintColor: 'white',
+
+        }}>
+            <Drawer.Screen name={'WelcomeScreen'} component={WelcomeScreen}
+                           options={{
+                               drawerLabel: 'Welcome screen',
+                               // color and focused are passed from the navigator based on if item is selected
+                               drawerIcon: ({color, focused })=> <Ionicons name={"home"} color={color} size={18}/>
+                           }}/>
+            <Drawer.Screen name={'UserScreen'} component={UserScreen}
+                           options={{
+                               drawerLabel: 'User screen',
+                               // color and focused are passed from the navigator based on if item is selected
+                               drawerIcon: ({color, size})=> <Ionicons name={"person"} color={color} size={size}/>
+                           }}/>
+        </Drawer.Navigator>
+    </NavigationContainer>;
+
+The drawer can also be toggled using `navigation.toggleDrawer`:
+
+    function UserScreen({route, navigation}) {
+        return (
+            <View style={styles.rootContainer}>
+                <Text>
+                    This is the <Text style={styles.highlight}>"User"</Text> screen!
+                </Text>
+                <Button onPress={navigation.toggleDrawer} title={"open menu"}/>
+            </View>
+        );
+    }
+
+
+#### Bottom Tabs
+
+    import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+    
+    export default function App() {
+        const BottomTab = createBottomTabNavigator();
+    
+        return <NavigationContainer>
+            <BottomTab.Navigator screenOptions={{
+                headerStyle: {backgroundColor: '#3c0a6b'},
+                headerTintColor: 'white',
+                tabBarActiveTintColor: '#3c0a6b'
+            }
+            }>
+            <BottomTab.Screen name={'WelcomeScreen'} component={WelcomeScreen}
+                              options={{
+                                  tabBarIcon: ({color, size}) => <Ionicons name={"home"} color={color} size={size}/>
+                              }}/>
+            <BottomTab.Screen name={'UserScreen'} component={UserScreen}
+                              options={{
+                                  tabBarIcon: ({color, size}) => <Ionicons name={"person"} color={color} size={size}/>
+                              }}/>
+    
+        </BottomTab.Navigator>
+    </NavigationContainer>
+
+### Nesting navigators
+
+As each navigator brings its own header, headers can be remove on individual screens using `headerShown: false` in the options prop of the `*.Screen` entry in App.tsx.
+
+See MealsApp for an example of mixing Drawer and Stack navigators.
+
+## Context / Redux
+
 
 
 ## Sidenotes

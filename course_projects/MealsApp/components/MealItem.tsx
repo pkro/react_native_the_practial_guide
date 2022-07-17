@@ -4,6 +4,7 @@ import React from "react";
 import {mealsType} from "../data/dummy-data";
 import {NativeStackNavigationProp, NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../types";
+import {MealOverviewDetails} from "./MealOverviewDetails";
 
 type MealItemPropsType = {
     id: string,
@@ -33,11 +34,7 @@ function MealItem({id, title, imageUrl, complexity, duration, affordability}: Me
                     <Image source={{uri: imageUrl}} style={styles.image}/>
                     <Text style={styles.title}>{title}</Text>
                 </View>
-                <View style={styles.details}>
-                    <Text style={styles.detailsItem}>{duration}m</Text>
-                    <Text style={styles.detailsItem}>{complexity}</Text>
-                    <Text style={styles.detailsItem}>{affordability}</Text>
-                </View>
+                <MealOverviewDetails duration={duration} complexity={complexity} affordability={affordability} />
                 </View>
             </Pressable>
         </View>
@@ -73,18 +70,6 @@ const styles = StyleSheet.create(
             fontWeight: 'bold',
             textAlign: 'center',
             fontSize: 18
-        },
-        details: {
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            fontSize: 12,
-            paddingTop: 8,
-            paddingBottom: 8,
-            justifyContent: 'center',
-            width: '100%',
-        },
-        detailsItem: {
-            marginLeft: 4,
         },
 
         buttonPressed: {

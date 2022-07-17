@@ -6,4 +6,6 @@ export type RootStackParamList = {
     };
     MealDetail: { id: string };
     MealsCategories: undefined; // no "custom" props beside route & navigation
+    Drawer: undefined;
+    Favorites: undefined;
 };
