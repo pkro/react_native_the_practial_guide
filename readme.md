@@ -739,7 +739,144 @@ See MealsApp for an example of mixing Drawer and Stack navigators.
 
 ## Context / Redux
 
+### Context
+  
+FavoriteContextProvider.tsx:
 
+    import React, {useState} from 'react';
+    import {createContext} from "react";
+    
+    type contextType = {
+        ids: string[],
+        addFavorite: (id: string) => void,
+        removeFavorite: (id: string) => void,
+    }
+    export const FavoritesContext = createContext<contextType>({
+        ids: [],
+        addFavorite: (id: string) => null,
+        removeFavorite: (id: string) => null,
+    });
+    
+    function FavoritesContextProvider({children}: { children: React.ReactChildren | React.ReactChild }) {
+        const [favoriteMealIds, setFavoriteMealIds] = useState<string[]>([]);
+    
+        function addFavorite(id: string) {
+            setFavoriteMealIds(oldState => [...oldState, id])
+        }
+    
+        function removeFavorite(id: string) {
+            setFavoriteMealIds(oldState => oldState.filter(val => val !== id))
+        }
+    
+        const value = {ids: favoriteMealIds, addFavorite: addFavorite, removeFavorite: removeFavorite};
+    
+        return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>
+    }
+    
+    export default FavoritesContextProvider;
+
+
+App.tsx:
+
+    <FavoritesContextProvider>
+     //router, main app
+    </FavoritesContextProvider>
+
+Wherever the context is needed (e.g. MealDetail.tsx):
+
+    const {ids, removeFavorite, addFavorite} = useContext(FavoritesContext);
+
+    function headerButtonPressHandler() {
+        if (favoriteMealIds.includes(id)) {
+            removeFavorite(id);
+            return;
+        }
+        addFavorite(id);
+    }
+
+
+### Redux (toolkit)
+
+favoritesSlice.ts
+
+    import {createSlice} from "@reduxjs/toolkit";
+    
+    export type favoritesSliceStateType = {
+        ids: string[]
+    }
+    
+    const initialState: favoritesSliceStateType = {
+        ids: []
+    }
+    
+    const favoritesSlice = createSlice({
+        name: 'favorites',
+        initialState: initialState,
+        reducers: {
+            addFavorite: (state, action) => {
+                // we can use state as if we mutate it directly - the passed
+                // "state" argument is a draft that is used to update the
+                // "real" state under the hood
+                state.ids.push(action.payload.id);
+            },
+            removeFavorite: (state, action) => {
+                state.ids.splice(state.ids.indexOf(action.payload.id), 1);
+            },
+        }
+    });
+    
+    // we don't export the slice itself but its components that are generated
+    // by redux toolkit and added to the object
+    export const {addFavorite, removeFavorite} = favoritesSlice.actions;
+    export default favoritesSlice.reducer;
+
+store.ts
+
+    import {configureStore} from "@reduxjs/toolkit";
+    import favoritesReducer from './favoritesSlice'
+    const store = configureStore({
+        reducer: {
+            favorites: favoritesReducer
+        }
+    });
+    
+    // Infer the `RootState` and `AppDispatch` types from the store itself
+    export type RootState = ReturnType<typeof store.getState>
+    // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+    export type AppDispatch = typeof store.dispatch
+    
+    export default store;
+
+
+App.tsx:
+
+    import {Provider} from "react-redux";
+    import store from "./store/redux/store";
+    ...
+    <Provider store={store}>
+    routes, main app etc.
+    </Provider>
+    ...
+
+Wherever the store and its methods are needed (e.g. MealDetail.tsx):
+
+    import {useDispatch, useSelector} from "react-redux";
+    import {RootState} from "../store/redux/store";
+    import {addFavorite, removeFavorite} from "../store/redux/favoritesSlice";
+    ...
+
+    const favoriteMealIds = useSelector( (state: RootState) => state.favorites.ids )
+    const dispatch = useDispatch();
+
+    function headerButtonPressHandler() {
+        if (favoriteMealIds.includes(id)) {
+            // NOT just removeFavorite(id) - what we pass is the action.payload object,
+            // which has an "id" property!
+            dispatch(removeFavorite({id: id}));
+            return;
+        }
+        dispatch(addFavorite({id: id}));
+    }
 
 ## Sidenotes
 

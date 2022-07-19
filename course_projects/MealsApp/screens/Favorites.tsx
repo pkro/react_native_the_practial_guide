@@ -2,16 +2,19 @@ import MealsList from "../components/MealsList";
 import {useContext} from "react";
 import {FavoritesContext} from "../store/context/favorites-context";
 import {View, Text, StyleSheet} from "react-native";
+import {RootState} from "../store/redux/store";
+import {useSelector} from "react-redux";
 
 function Favorites() {
 
-    const {ids} = useContext(FavoritesContext);
+    //const {ids} = useContext(FavoritesContext);
+    const favoriteMealIds = useSelector((state: RootState) => state.favorites.ids);
 
-    if (ids.length === 0) {
+    if (favoriteMealIds.length === 0) {
         return <View style={styles.rootContainer}><Text style={styles.text}>You have no favorite meals yet</Text></View>
     }
     return (
-        <MealsList ids={ids} title={"Favorites"}/>
+        <MealsList ids={favoriteMealIds} title={"Favorites"}/>
     );
 }
 
