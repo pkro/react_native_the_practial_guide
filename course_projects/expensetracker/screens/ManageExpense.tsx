@@ -1,5 +1,5 @@
 import React from 'react';
 
-function ManageExpense() {
+export default function ManageExpense() {
     return <></>;
 }

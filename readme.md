@@ -878,6 +878,22 @@ Wherever the store and its methods are needed (e.g. MealDetail.tsx):
         dispatch(addFavorite({id: id}));
     }
 
+## Expense tracker app
+
+### Setup steps
+
+- `expo init expensetracker`
+- create `screens` and `components` folder in root
+- setup stubs for screens `AllExpenses`, `ManageExpense`, `RecentExpenses`
+- Install react navigation
+  - `npm install @react-navigation/native`
+  - `expo install react-native-screens react-native-safe-area-context`
+- Install the navigators needed, here [native-stack](https://reactnavigation.org/docs/stack-navigator) and [bottom-tabs](https://reactnavigation.org/docs/bottom-tab-navigator):
+  - `npm install @react-navigation/native-stack`
+  - `npm install @react-navigation/bottom-tabs`
+- Set up navigation in App.tsx or own component
+
+
 ## Sidenotes
 
 - removing a pending snapshot if emulator was killed: `sudo rm ~/.android/avd/<your-device-name>.avd/*.lock` https://stackoverflow.com/questions/50055863/emulator-error-a-snapshot-operation-for-nexus-4-api-27-is-pending-and-timeou
