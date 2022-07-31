@@ -892,7 +892,7 @@ Wherever the store and its methods are needed (e.g. MealDetail.tsx):
   - `npm install @react-navigation/native-stack`
   - `npm install @react-navigation/bottom-tabs`
 - Set up navigation in App.tsx or own component
-
+- Set up styling and titles for the navigator tabs / icons
 
 ## Sidenotes
 
